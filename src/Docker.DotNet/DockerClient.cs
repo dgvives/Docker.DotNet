@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Pipes;
@@ -347,18 +347,17 @@ namespace Docker.DotNet
             CancellationToken cancellationToken)
         {
             var request = PrepareRequest(method, path, queryString, headers, data);
-            var tcs = new TaskCompletionSource<HttpResponseMessage>();
 
             if (timeout != s_InfiniteTimeout)
             {
                 using (var timeoutTokenSource = CancellationTokenSource.CreateLinkedTokenSource(cancellationToken))
-                using (cancellationToken.Register(() => tcs.SetCanceled()))
                 {
                     timeoutTokenSource.CancelAfter(timeout);
-                    return await await Task.WhenAny(tcs.Task, _client.SendAsync(request, completionOption, cancellationToken)).ConfigureAwait(false);
+                    return await _client.SendAsync(request, completionOption, timeoutTokenSource.Token).ConfigureAwait(false);
                 }
             }
 
+            var tcs = new TaskCompletionSource<HttpResponseMessage>();
             using (cancellationToken.Register(() => tcs.SetCanceled()))
             {
                 return await await Task.WhenAny(tcs.Task, _client.SendAsync(request, completionOption, cancellationToken)).ConfigureAwait(false);

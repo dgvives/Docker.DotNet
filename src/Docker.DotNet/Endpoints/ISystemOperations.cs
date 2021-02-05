@@ -1,8 +1,8 @@
-﻿using System.IO;
+using System;
+using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
 using Docker.DotNet.Models;
-using System;
 
 namespace Docker.DotNet
 {
@@ -55,7 +55,7 @@ namespace Docker.DotNet
         /// </remarks>
         Task<SystemInfoResponse> GetSystemInfoAsync(CancellationToken cancellationToken = default(CancellationToken));
 
-        [Obsolete("Use 'Task MonitorEventsAsync(ContainerEventsParameters parameters, CancellationToken cancellationToken, IProgress<JSONMessage> progress)'")]
+        [Obsolete("Use 'Task MonitorEventsAsync(ContainerEventsParameters parameters, IProgress<Message> progress, CancellationToken cancellationToken)")]
         Task<Stream> MonitorEventsAsync(ContainerEventsParameters parameters, CancellationToken cancellationToken);
 
         /// <summary>

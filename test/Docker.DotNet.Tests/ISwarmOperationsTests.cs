@@ -1,18 +1,23 @@
-﻿using System;
+using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Docker.DotNet.Models;
 using Xunit;
+using Xunit.Abstractions;
 
 namespace Docker.DotNet.Tests
 {
+    [CollectionDefinition("TestsCollection", DisableParallelization = true)]
     public class ISwarmOperationsTests : IDisposable
     {
         private readonly DockerClient _client;
+        private readonly ITestOutputHelper _output;
+        private readonly bool _wasSwarmInitialized = false;
 
-        public ISwarmOperationsTests()
+        public ISwarmOperationsTests(ITestOutputHelper output)
         {
+            _output = output;
             using var configuration = new DockerClientConfiguration();
             _client = configuration.CreateClient();
 
@@ -21,7 +26,11 @@ namespace Docker.DotNet.Tests
             {
                 var result = _client.Swarm.InitSwarmAsync(new SwarmInitParameters { AdvertiseAddr = "10.10.10.10", ListenAddr = "127.0.0.1" }, default).Result;
             }
-            catch { }
+            catch
+            {
+                _output.WriteLine("Couldn't init a new swarm, node should take part of a existing one");
+                _wasSwarmInitialized = true;
+            }
         }
 
         [Fact]
@@ -156,12 +165,11 @@ namespace Docker.DotNet.Tests
 
         public void Dispose()
         {
-            //if (!wasSwarmInitialized)
-            //{
-            //    _client.Swarm.LeaveSwarmAsync(new SwarmLeaveParameters { Force = true });
-            //}
-
-            GC.SuppressFinalize(this);
+            if (_wasSwarmInitialized)
+            {
+                _client.Swarm.LeaveSwarmAsync(new SwarmLeaveParameters { Force = true });
+            }
+            _client.Dispose();
         }
     }
 }

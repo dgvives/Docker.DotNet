@@ -1,9 +1,9 @@
-﻿using Docker.DotNet.Models;
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Threading;
 using System.Threading.Tasks;
+using Docker.DotNet.Models;
 
 namespace Docker.DotNet
 {
@@ -160,7 +160,7 @@ namespace Docker.DotNet
         /// <param name="id">ID or name of the container.</param>
         Task<Stream> ExportContainerAsync(string id, CancellationToken cancellationToken = default(CancellationToken));
 
-        [Obsolete("Use 'Task GetContainerStatsAsync(string id, ContainerStatsParameters parameters, CancellationToken cancellationToken, IProgress<JSONMessage> progress)'")]
+        [Obsolete("Use 'Task GetContainerStatsAsync(string id, ContainerStatsParameters parameters, IProgress<ContainerStatsResponse> progress, CancellationToken cancellationToken)'")]
         Task<Stream> GetContainerStatsAsync(string id, ContainerStatsParameters parameters, CancellationToken cancellationToken);
 
         /// <summary>
