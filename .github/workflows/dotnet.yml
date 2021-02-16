@@ -32,12 +32,13 @@ jobs:
       run: dotnet test --no-build --verbosity normal
     - name: InferSharp
       uses: microsoft/infersharpaction@v0.2
-    - name: SecurityCodeScan
-      # You may pin to the exact commit or the version.
-      # uses: security-code-scan/security-code-scan-results-action@cdb3d5e639054395e45bf401cba8688fcaf7a687
-      uses: security-code-scan/security-code-scan-results-action@v1.3
-      # with:
-        # The output directory where SARIF files should be collected.
-        # sarif_directory: # optional, default is ../results
-    - name: Duplicate code detection tool
-      uses: platisd/duplicate-code-detection-tool@1.0.0
+#    - name: SecurityCodeScan
+#      # You may pin to the exact commit or the version.
+#      # uses: security-code-scan/security-code-scan-results-action@cdb3d5e639054395e45bf401cba8688fcaf7a687
+#      uses: security-code-scan/security-code-scan-results-action@v1.3
+#      # with:
+#        # The output directory where SARIF files should be collected.
+#        # sarif_directory: # optional, default is ../results
+#    - name: Duplicate code detection tool
+#      uses: platisd/duplicate-code-detection-tool@1.0.0
+#
